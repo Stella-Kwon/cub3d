@@ -6,7 +6,7 @@
 /*   By: skwon2 <skwon2@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:18:06 by jmakkone          #+#    #+#             */
-/*   Updated: 2024/11/08 10:47:01 by jmakkone         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:56:48 by skwon2           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static int check_collision(t_caster *c, double new_px, double new_py)
 		c->px = new_px;
 	if (can_move_y)
 		c->py = new_py;
-	c->mmap_px = c->px * c->map->scale_x;
-	c->mmap_py = c->py * c->map->scale_y;
+	c->mmap_px = (c->px - 0.25) * c->map->scale_x + 0.25;
+	c->mmap_py = (c->py - 0.25) * c->map->scale_y + 0.25;
 	return (can_move_x || can_move_y);
 }
 

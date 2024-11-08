@@ -6,7 +6,7 @@
 /*   By: skwon2 <skwon2@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 10:43:31 by jmakkone          #+#    #+#             */
-/*   Updated: 2024/11/08 10:48:59 by jmakkone         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:54:18 by skwon2           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,30 @@ void draw_minimap(t_caster *c, int x, int y, int flag)
 	mlx_image_t *window;
 
 	if (flag == 1)
-		color = 0x0000FF;
+		color = 0x0000FFFF;
 	if (flag == 0)
-		color = 0xFFFFFF; // 벽은 검은색, 빈 공간은 흰색
+		color = 0xFFFFFFFF; // 벽은 검은색, 빈 공간은 흰색
 	if (flag == 2)
-		color = 0xFF0000;
+	{
+		color = 0xFF0000FF;
+		// c->map->scale_y = 5;
+		// c->map->scale_x = 5;
+		window = c->window->minimap; //CALL THE MINIMAP IMAGE FORMAT TO WINDOW
+		i = -1;
+		while (++i <5)
+		{
+			j = -1;
+			while (++j <5)
+			{
+				// mlx_put_pixel(window, x + j, y + i, color); // EACH TILE GETS TO BE FILLED
+				if (x + j < (int) window->width && y + i < (int) window->height)
+					mlx_put_pixel(window, x + j, y + i, color);
+			}
+		}
+		return ;
+	}
+	// if (flag == 4)
+	// 	color = 0xFF0000;
 	window = c->window->minimap; //CALL THE MINIMAP IMAGE FORMAT TO WINDOW
 	i = -1;
 	while (++i < c->map->scale_y)
@@ -47,6 +66,7 @@ void draw_minimap(t_caster *c, int x, int y, int flag)
 				mlx_put_pixel(window, x + j, y + i, color);
 		}
 	}
+	
 }
 
 // 미니맵을 그릴 때 사용될 오프셋을 계산하고 화면 크기 내에서만 그리기
@@ -59,6 +79,7 @@ void parse_minimap(t_caster *c)
 	// c->map->scale_x = MINIMAP_SIZE / c->map->map_width;
 	// c->map->scale_y = MINIMAP_SIZE / c->map->map_height;
 
+	printf("scale : %f\n", c->map->scale_x);
 	int i = 0;
 	mlx_image_t *window = c->window->minimap;
 	while (i < MINIMAP_SIZE) // height
@@ -92,7 +113,6 @@ void parse_minimap(t_caster *c)
 		// 넘지않도록 미니맵윈도우크기 , 오프셋 조정
 		camera_offset_x = (c->map->map_width * c->map->scale_x) - MINIMAP_SIZE;
 	}
-
 	if (c->map->map_height * c->map->scale_y < MINIMAP_SIZE)
 	{
 		camera_offset_y = (c->map->map_height * c->map->scale_y - MINIMAP_SIZE) / 2;
@@ -189,6 +209,12 @@ void parse_minimap(t_caster *c)
 	// 	printf("Invalid map indices: map_x = %d, map_y = %d\n", map_x, map_y);
 	// }
 	draw_minimap(c, player_x, player_y, 2);
-
+	// double distance = 50;  // Distance to extend the FOV
+	// int left_x = c->ray_dir_x * distance;
+	// int left_y = c->ray_dir_y * distance;
+	// int right_x = c->ray_dir_x * distance;
+	// int right_y = c->ray_dir_y * distance;
+	// draw_minimap(c, left_x, left_y, 4);
+	// draw_minimap(c, right_x, right_y, 4);
 	// draw_minimap(c, PLAYER_CENTER, PLAYER_CENTER, 2);
 }
